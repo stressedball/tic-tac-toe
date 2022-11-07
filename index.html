@@ -6,18 +6,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="style.css" rel="stylesheet">
     <script src="script.js" defer></script>
-    <title>Document</title>
+    <title>TIC TAC TOE</title>
 </head>
 <body>
+    <h1>Tic tac toe</h1>
+    <div class="gameboard"></div>
     <div class="container">
-        <h1>Tic tac toe</h1>
-        <div class="container">
-            <div class="container gameboard"></div>
-            <div class="container players"></div>
-            <div class="container xo-choice">
-                <p>Choose your weapon</p>
-                <button>X</button>
-                <button>O</button>
+        <div class="game">
+            <div class="button-start-container">
+                <button class="start-game">Start new game?</button>
+            </div>
+            <div class="hidden">
+                <div class="player">
+                    <form class="player-one get-name">
+                        <label for="player-one-name">Player One...enter your name</label>
+                        <input type="text" id="player-one-name">
+                        <button class="player-one-name">Submit</button>
+                    </form>
+                    <p class="display-name">Good luck</p>
+                </div>
+                <div class="player">
+                    <div class="player-two choice">
+                        <p>Who'll take the challenge?</p>
+                        <button class="human">A courageous human</button>
+                        <button class="cpu">The devil...</button>
+                    </div>
+                    <form class="player-two get-name">
+                        <label for="player-two-name">Player Two...enter your name</label>
+                        <input type="text" id="player-two-name">
+                        <button class="player-two-name">Submit</button>
+                    </form>
+                    <p class="display-name">Good luck</p>
+                </div>
+                <div class="container xo-choice">
+                    <p>Choose your weapon</p>
+                    <div>
+                        <button class="x">X</button>
+                        <button class="o">O</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

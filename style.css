@@ -1,3 +1,8 @@
+:root {
+    --main-gap: 50px;
+    --sub-gap: 20px;
+}    
+    
 html {
     height: 100%;
     width: 100%;
@@ -12,7 +17,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 .block {
@@ -22,31 +27,95 @@ body {
     align-items: center;
     justify-content: center;
     font-size: clamp(1em, 2em, 3em);
+    height: 80px;
+    width: 80px;
 }
 
 .block:hover {
     background-color: red;
 }
 
+button {
+    height: fit-content;
+    width: auto;
+    font-size: clamp(1em, 1.2em, 1.5em);
+}
 
-.container.gameboard {
-    display: grid;
-    grid-template-rows: repeat(3, 1fr);
-    grid-template-columns: repeat(3, 1fr);
-    height: 300px;
-    width: 300px;
-    column-gap: 2px;
-    row-gap: 2px;
-    /* background-color: gray; */
+.button-start-container {
+    position: absolute;
+    background-color: #9bc0e0;
+    /* min-width: clamp(100px, 120px, 200px);
+    min-height: clamp(100px, 120px, 200px);
+    background-color: aliceblue; */
+}
+
+.button-start-container.game-start {
+}
+
+button.start-game {
+    position: absolute;
+    border: none;
+    background-color: bisque;
+}
+
+button.game-start {
+    border: none;
+    /* font-size: clamp(1em, 1.2em, 1.4em); */
+    /* transform: translate(0, 0);
+    transition: transform 2000ms;
+    height: 20px; */
+}
+
+button:hover {
+    background-color: gray;
+    color: white;
 }
 
 .container {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--main-gap);
 }
 
-.container.players {
-    display: flex;
-    font-size: 2em;
-    gap: 30px;
-    justify-content: space-between;
+.gameboard {
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 2px;
+    row-gap: 2px;
+}
+
+.game {
+    position: relative;
+    background-color: coral;
+}
+
+.game.game-start {
+    /* display: inline-block; */
+    background-color: peru;
+}
+
+
+.get-name, .display-name, .choice {
+    /* position: absolute;
+    top: 0; */
+    background-color: rgb(0, 0, 0, 0.5);
+    z-index: -1;
+    /* opacity: 0; */
+}
+
+
+
+
+.player {
+    /* position: relative; */
+    /* display: flex; */
+    /* align-items: center; */
+    /* justify-content: space-around; */
+    width: clamp(40vw, 50vw, 60vw);
+}
+
+.xo-choice {
+    gap: var(--sub-gap);
 }
