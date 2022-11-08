@@ -75,8 +75,8 @@ function inputManagement(inputKey) {
 }
 
 function newGame(selector) {
-    // selector.classList.add('hide');
-    document.querySelector('.button-start-container').classList.add('hide-container');
+    document.querySelector('button.start-game').classList.add('hide');
+    document.querySelector('.button-start-container').classList.add('hide');
     document.querySelector('.game .button-start-container').classList.remove('button-start-container');
 
     // document.querySelector('div.hidden').classList.remove('hidden');

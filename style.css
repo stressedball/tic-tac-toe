@@ -67,8 +67,7 @@ button {
 }
 
 .hide-container {
-    max-height: 0;
-    transition: max-height 2000ms;
+    z-index: -1;
 }
 
 
@@ -112,16 +111,22 @@ button.start-game:hover {
     width: var(--game-width);
 }
 
-/* .game:hover {
-    background-color: gray;
-} */
 
 .hide {
-    z-index: -1;
-    height: 0;
-    width: 0;
-    opacity: 0;
-    transition: opacity 2000ms;
+    /* z-index: -1; */
+    animation: fade-out 5000ms forwards;
+}
+
+@keyframes fade-out {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(-400px);
+    }
 }
 
 .screen {
