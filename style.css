@@ -1,6 +1,8 @@
 :root {
     --main-gap: 50px;
     --sub-gap: 20px;
+    --game-width: 300px;
+    --game-height: 300px;
 }    
     
 html {
@@ -42,32 +44,49 @@ button {
 }
 
 .button-start-container {
+    min-height: 100%;
+    min-width: 100%;
+    transition: min-height 2000ms;
+    background-color: black;
+}
+
+.button-start-container::before {
+    /* content: '';
     position: absolute;
-    background-color: #9bc0e0;
+    background-color: black; */
     /* min-width: clamp(100px, 120px, 200px);
     min-height: clamp(100px, 120px, 200px);
     background-color: aliceblue; */
+    /* min-height: 100%;
+    min-width: 100%;
+    transition: min-height 2000ms; */
 }
 
-.button-start-container.game-start {
+.button-start-container:hover::before {
+    /* background-color: gray; */
 }
+
+.hide-container {
+    max-height: 0;
+    transition: max-height 2000ms;
+}
+
+
 
 button.start-game {
     position: absolute;
     border: none;
-    background-color: bisque;
+    background-color: white;
+    height: calc(0.5 * var(--game-height));
+    width: calc(0.5 * var(--game-width));
+    top: calc(calc(var(--game-height) - calc(0.5 * var(--game-height))) / 2);
+    left: calc(calc(var(--game-width) - calc(0.5 * var(--game-width))) / 2);
 }
 
-button.game-start {
-    border: none;
-    /* font-size: clamp(1em, 1.2em, 1.4em); */
-    /* transform: translate(0, 0);
-    transition: transform 2000ms;
-    height: 20px; */
-}
 
-button:hover {
-    background-color: gray;
+
+button.start-game:hover {
+    background-color: black;
     color: white;
 }
 
@@ -88,32 +107,35 @@ button:hover {
 
 .game {
     position: relative;
-    background-color: coral;
+    /* background-color: black; */
+    height: var(--game-height);
+    width: var(--game-width);
 }
 
-.game.game-start {
-    /* display: inline-block; */
-    background-color: peru;
-}
+/* .game:hover {
+    background-color: gray;
+} */
 
-
-.get-name, .display-name, .choice {
-    /* position: absolute;
-    top: 0; */
-    background-color: rgb(0, 0, 0, 0.5);
+.hide {
     z-index: -1;
-    /* opacity: 0; */
+    height: 0;
+    width: 0;
+    opacity: 0;
+    transition: opacity 2000ms;
 }
 
-
-
-
-.player {
-    /* position: relative; */
-    /* display: flex; */
-    /* align-items: center; */
-    /* justify-content: space-around; */
-    width: clamp(40vw, 50vw, 60vw);
+.screen {
+    position: absolute;
+    top: 0;
+    background-color: black;
+    z-index: -1;
+    color: white;
+    height: 300px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
 }
 
 .xo-choice {
