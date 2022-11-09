@@ -31,39 +31,84 @@ function Gameboard() {
 }
 
 function MakePlayer(name) {
+    // const player = () => name;
     this.name = name;
-    let playerBlock = document.createElement('div');
-    playersContainer.appendChild(playerBlock);
-    if (name === 'CPU') {
-        playerBlock.classList.add('cpu');
-    } else {
-        playerBlock.classList.add('player');    
-    }
+    // let playerBlock = document.createElement('div');
+    // playersContainer.appendChild(playerBlock);
+    // if (name === 'CPU') {
+    //     playerBlock.classList.add('cpu');
+    // } else {
+    //     playerBlock.classList.add('player');    
+    // }
 }
 
-//based on choice of X O
-//make eventListener
-// function X_O(block) {
-//     if (block.target.classList.contains('x')) {
-//         block.target.textContent = 'X';
-//     } else {
-//         block.target.textContent = 'O';
-//     }
-// }
+// based on choice of X O
+// make eventListener
+function Symbol(player, symbol) {
+
+}
 
 function Gameflow (player1, player2, weapon1, weapon2) {
 
 }
 
+let goBack = false;
+let goBackSymbol = false;
 function clickManagement(event) {
-    if (event.target.classList.contains('player-name')) {
-        event.preventDefault();
-        let playerName = document.getElementById('player-one-name').value;
+    let playerOneName, playerTwoName, playerOneSymbol, playerTwoSymbol;
+    
+    if (event.target === document.querySelector('.player-one-register')) {
+        // if (goBack === true) {
+        //     return;
+        // }
+
+        if (document.querySelector('button.focus') === null) {
+            if (document.querySelector('.symbol-choice p.hidden')) {
+                document.querySelector('.symbol-choice p.hidden').classList.add('message');
+                document.querySelector('.symbol-choice p.hidden').classList.remove('hidden');
+            } 
+
+        }
+
+        if (document.querySelector('input.player-name').value === '') {
+            if(document.querySelector('.second-message.hidden')) {
+                document.querySelector('.second-message').classList.add('message');
+                document.querySelector('.second-message').classList.remove('hidden');
+            }
+
+            // document.querySelector('button.focus');
+        }
+
+        if (goBack === true) {
+            return;
+        }
+        // console.log(playerOneSymbol)
+        playerOneName = (document.querySelector('input.player-name').value);
+        playerOneSymbol = document.querySelector('button.focus');
+
     }
 
+    if (event.target === document.querySelector('button.x')) {
+        event.target.classList.add('focus');
+        if (document.querySelector('button.o').classList.contains('focus')) {
+            document.querySelector('button.o').classList.remove('focus');
+        }
+    } else if (event.target === document.querySelector('button.o')) {
+        event.target.classList.add('focus');
+        if (document.querySelector('button.x').classList.contains('focus')) {
+            document.querySelector('button.x').classList.remove('focus');
+        }
+    }
+
+    //event prevent default player 1 input name
+    if (event.target.classList.contains('player-name')) {
+        event.preventDefault();
+        // let playerName = document.getElementById('player-name one').value;
+    }
+
+    //START GAME
     if (event.target.classList.contains('start-game')) {
         newGame();
-        console.log('ok')
     }
 }
 
@@ -74,11 +119,12 @@ function inputManagement(inputKey) {
     }
 }
 
-function newGame(selector) {
+function newGame() {
     document.querySelector('button.start-game').classList.add('hide');
     document.querySelector('.button-start-container').classList.add('hide');
     document.querySelector('.game .button-start-container').classList.remove('button-start-container');
-
+    document.querySelector('.first').classList.add('screen');
+    document.querySelector('.first').classList.remove('hidden');
     // document.querySelector('div.hidden').classList.remove('hidden');
     // document.querySelector('.game > div').classList.add('game-start');
     // document.querySelector('.game').classList.add('game-start');

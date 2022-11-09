@@ -25,43 +25,36 @@
                     'player 2, you've been assigned [weapon 2], what is your name?'
                     if cpu -> do nothing?
                     START GAME -->
-            <div class="screen hidden">
-                <div class="message">
-                    Player number 1, enter your name
+            <div class="first hidden">
+                <div class="name-choice">
+                    <div class="message">
+                        Player number 1, enter your name
+                    </div>
+                    <div class="second-message hidden">
+                        Void isn't allowed
+                    </div>
+                    <input type="text" class="player-name one">
                 </div>
-                <input type="text" class="player-name one">
-                <button class="player-name one">Enter</button>
-                <div class="container xo-choice">
-                        <p>Choose your weapon</p>
+                <button class="player-one-register">Enter</button>
+                <div class="symbol-choice">
+                        <p class="no-margin">Choose your weapon</p>
+                        <p class="hidden no-margin">Please choose your weapon</p>
                         <div>
                             <button class="x">X</button>
                             <button class="o">O</button>
                         </div>
                 </div>
             </div>
-
-                <!-- <div class="second-screen">
-                    <div class="choice"></div>
-                </div>
-                <div class="player">
-                    <form class="player-one get-name">
-                        <label for="player-one-name">Player One...enter your name</label>
-                    </form>
-                    <p class="display-name">Good luck</p>
-                </div>
-                <div class="player">
-                    <div class="player-two choice">
-                        <p>Who'll take the challenge?</p>
-                        <button class="human">A courageous human</button>
-                        <button class="cpu">The devil...</button>
+            <div class="second hidden">
+                <div class="name-choice">
+                    <div class="message">
+                        Who'll you challenge?
                     </div>
-                    <form class="player-two get-name">
-                        <label for="player-two-name">Player Two...enter your name</label>
-                        <input type="text" id="player-two-name">
-                        <button class="player-two-name">Submit</button>
-                    </form>
-                    <p class="display-name">Good luck</p>
-                </div> -->
+                    <div class="">
+                        <button class="human">A human</button>
+                        <button class="cpu">A machine</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
