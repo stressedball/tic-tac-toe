@@ -16,45 +16,55 @@
             <div class="button-start-container">
                 <button class="start-game">Start new game?</button>
             </div>
-                    <!-- message number 1
-                    'player one enter your name and choose your weapon'
-                    Message 2
-                    'Who'll be player 2?
-                    A human or CPU?
-                    if human, screen 3
-                    'player 2, you've been assigned [weapon 2], what is your name?'
-                    if cpu -> do nothing?
-                    START GAME -->
             <div class="first hidden">
                 <div class="name-choice">
-                    <div class="message">
+                    <p class="first message-one">
                         Player number 1, enter your name
-                    </div>
-                    <div class="second-message hidden">
+                    </p>
+                    <p class="first message-two no-opacity">
                         Void isn't allowed
-                    </div>
+                    </p>
                     <input type="text" class="player-name one">
                 </div>
                 <button class="player-one-register">Enter</button>
                 <div class="symbol-choice">
-                        <p class="no-margin">Choose your weapon</p>
-                        <p class="hidden no-margin">Please choose your weapon</p>
-                        <div>
-                            <button class="x">X</button>
-                            <button class="o">O</button>
-                        </div>
+                    <p class="first message-three">Choose your weapon</p>
+                    <p class="first message-four no-opacity">Please choose your weapon</p>
+                    <div>
+                        <button class="x">X</button>
+                        <button class="o">O</button>
+                    </div>
                 </div>
             </div>
             <div class="second hidden">
                 <div class="name-choice">
-                    <div class="message">
+                    <p class="second message-one">
                         Who'll you challenge?
-                    </div>
-                    <div class="">
-                        <button class="human">A human</button>
-                        <button class="cpu">A machine</button>
-                    </div>
+                    </p>
+                    <p class="second message-two no-opacity">Please choose your adversary</p>
                 </div>
+                <div>
+                    <button class="human">A human</button>
+                    <button class="cpu">A machine</button>
+                </div>
+                <div>
+                    <button class="human-cpu-choice">
+                        Confirm
+                    </button>
+                </div>
+            </div>
+            <div class="third hidden">
+                <div class="name-choice">
+                    <p class="third message-one">
+                        Player number 2, enter your name
+                    </p>
+                    <p class="third message-two no-opacity">
+                        Void isn't allowed
+                    </p>
+                    <input type="text" class="player-name two">
+                </div>
+                <button class="player-two-register">Enter</button>
+                <div class="show-symbol">Player 2 weapon :</div>
             </div>
         </div>
     </div>

@@ -29,8 +29,8 @@ body {
     align-items: center;
     justify-content: center;
     font-size: clamp(1em, 2em, 3em);
-    height: 80px;
-    width: 80px;
+    height: 100px;
+    width: 100px;
 }
 
 .block:hover {
@@ -39,7 +39,7 @@ body {
 
 button {
     height: fit-content;
-    max-width: 50%;
+    /* max-width: 50%; */
     font-size: clamp(1em, 1.2em, 1.5em);
 }
 
@@ -74,8 +74,6 @@ button {
     z-index: -1;
 }
 
-
-
 button.start-game {
     position: absolute;
     border: none;
@@ -91,17 +89,9 @@ button.start-game:hover {
     color: white;
 }
 
-/* button.x, button.o :focus {
-    background-color: gray;
-    color: white;
-} */
-
-/* .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--main-gap);
-} */
+button.cpu-human-choice {
+    width: 100%;
+}
 
 .focus {
     background-color: gray;
@@ -139,6 +129,7 @@ input:focus {
 }
 
 .hidden {
+    position: absolute;
     z-index: -1;
     opacity: 0;
     transition: opacity 1000ms;
@@ -147,12 +138,12 @@ input:focus {
 @keyframes fade-out {
     0% {
         opacity: 1;
-        transform: translateX(0);
+        /* transform: translateX(0); */
     }
 
     100% {
         opacity: 0;
-        transform: translateX(-400px);
+        /* transform: translateX(-400px); */
     }
 }
 
@@ -170,8 +161,8 @@ input:focus {
     }
 }
 
-.no-margin {
-    margin: 0;
+div p {
+    margin: 3px;
 }
 
 .screen {
@@ -194,4 +185,9 @@ input:focus {
     flex-direction: column;
     row-gap: 3px;
     align-items: center;
+}
+
+.no-opacity {
+    opacity: 0;
+    transition: opacity 1000ms;
 }
