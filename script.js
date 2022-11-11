@@ -2,63 +2,70 @@
 
 window.addEventListener('keypress', inputManagement);
 window.addEventListener('click', clickManagement);
-// window.addEventListener('load', onLoad);
 let gameboardArray = [];
-const gameboardContainer = document.querySelector('.gameboard');
-const playersContainer = document.querySelector('.container.players');
-const startGameButton = document.querySelector('button.start-game');
-// const startGameButtonContainer = document.querySelector('div.button-start-container');
-const gameContainerWidth = document.querySelector('.game').getBoundingClientRect().width;
-const gameContainerHeight = document.querySelector('.game').getBoundingClientRect().height;
-// startGameButton.addEventListener('click', newGame);
-
-
-let player1, player2;
-
 const newGameboard = new Gameboard();
+let count = 0;
+let playerOne = {};
+let playerTwo = {};
+let playerOneName = '', playerTwoName = '', playerOneSymbol = '', playerTwoSymbol = '';
+let globalCheck = [[0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 4, 8], [6, 4, 2]];
 
 function Gameboard() {
     for (let i = 0; i < 9; i++) {
+        gameboardArray.push({index : i})
         let block = document.createElement('div');
         block.classList.add('block');
         block.setAttribute('data-index', `${i}`);
-        gameboardContainer.appendChild(block);
-        // block.addEventListener('click', X_O);
-        gameboardArray.push(block);
-        gameboardArray.push({index : i});
+        document.querySelector('.gameboard').appendChild(block);
     }
 }
 
-let count = 0;
-function Gameflow (playerOneName, playerTwoName, symbolOne, symbolTwo) {
+function Gameflow () {
 
-    for (let board of gameboardArray) {
-        board.addEventListener('click', () => {
-            if (board.classList.contains('tagged')) {
-                return;
-            } else {
-                count++;
-                const boardIndex = board.getAttribute('data-index');
-                if (count % 2 === 0) {
-                    board.classList.add('tagged');
-                    board.textContent = symbolOne;
-                    gameboardArray[board].push({symbol : `${symbolOne}`});
-                } else if (count % 2 !== 0) {
-                    board.classList.add('tagged');
-                    board.textContent = symbolTwo;
-                    gameboardArray[board].push({symbol : `${symbolTwo}`});
-                }
-                // checkCombinations();
+    for (let block of gameboardArray) {
+        block = document.querySelector(`.block[data-index = "${block.index}"]`);
+        block.addEventListener('click', listener);
+        block.addEventListener('click', checkMoves);
+    }
+
+    function checkMoves() {
+        if (getMoves(playerOne) !== undefined) {
+            document.querySelector('.fourth .winner').classList.remove('no-opacity');
+            document.querySelector('.fourth .winner').textContent += ` ${playerOneName}`;
+            for (let block of gameboardArray) {
+                block = document.querySelector(`.block[data-index = "${block.index}"]`);
+                block.removeEventListener('click', listener);
+                block.removeEventListener('click', checkMoves);
             }
-        });
-    }
-
-    function checkCombinations() {
-        // console.log(gameboardArray);
+        } else if (getMoves(playerTwo) !== undefined) {
+            document.querySelector('.fourth .winner').classList.remove('no-opacity');
+            document.querySelector('.fourth .winner').textContent += ` ${playerTwoName}`;
+            for (let block of gameboardArray) {
+                block = document.querySelector(`.block[data-index = "${block.index}"]`);
+                block.removeEventListener('click', listener);
+            }
+        }
     }
 }
 
-let playerOneName, playerTwoName, playerOneSymbol, playerTwoSymbol;
+function listener(event) {
+    let block = document.querySelector(`.block[data-index = "${event.target.dataset.index}"]`);
+    if (block.classList.contains('tagged')) {
+        return;
+    } else {
+        const boardIndex = block.getAttribute('data-index');
+        let symbol;
+        if (count % 2 === 0) {
+            symbol = playerOne.symbol;
+        } else if (count % 2 !== 0) {
+            symbol = playerTwo.symbol;
+        }
+        block.classList.add('tagged');
+        block.textContent = symbol;
+        gameboardArray[boardIndex].symbol = symbol;
+        count++;
+    }
+}
 
 function clickManagement(event) {
 
@@ -82,11 +89,11 @@ function clickManagement(event) {
         }
 
         playerTwoName = (document.querySelector('input.player-name.two').value);
-        Gameflow(playerOneName, playerTwoName, playerOneSymbol, playerTwoSymbol)
-        // playerOneSymbol = document.querySelector('button.focus').textContent;
-        // document.querySelector('.first').classList.add('hide')
-        // document.querySelector('.second').classList.remove('hidden');
-        // document.querySelector('.second').classList.add('screen');
+        playerTwo = Player(playerTwoName, playerTwoSymbol);
+        document.querySelector('div.third').classList.add('hide');
+        document.querySelector('div.fourth').classList.remove('hidden');
+        document.querySelector('div.fourth').classList.add('screen');
+        Gameflow();
     }
 
     //HUMAN CPU CHOICE MANAGEMENT
@@ -159,6 +166,7 @@ function clickManagement(event) {
 
         playerOneName = (document.querySelector('input.player-name.one').value);
         playerOneSymbol = document.querySelector('button.focus').textContent;
+        playerOne = Player(playerOneName, playerOneSymbol);
         playerTwoSymbol = document.querySelector('.symbol-choice div button:not(.focus)').textContent;
         document.querySelector('.first').classList.add('hide')
         document.querySelector('.second').classList.remove('hidden');
@@ -192,26 +200,16 @@ function clickManagement(event) {
     }
 }
 
+//TOGGLE START BUTTON
 function newGame() {
     document.querySelector('button.start-game').classList.add('hide');
     document.querySelector('.button-start-container').classList.add('hide');
     document.querySelector('.game .button-start-container').classList.remove('button-start-container');
     document.querySelector('.first').classList.add('screen');
     document.querySelector('.first').classList.remove('hidden');
-    // document.querySelector('div.hidden').classList.remove('hidden');
-    // document.querySelector('.game > div').classList.add('game-start');
-    // document.querySelector('.game').classList.add('game-start');
-    // startGameButtonContainer.style.height =`${0.2 * gameContainerHeight}px`;
-    // startGameButtonContainer.style.width = `${0.2 * gameContainerWidth}px`;
-    // startGameButton.style.width = `${0.8 * startGameButtonContainer.getBoundingClientRect().width}px`;
-    // startGameButton.style.height = `${0.8 * startGameButtonContainer.getBoundingClientRect().height}px`;
-
-    // startGameButtonContainer.classList.add('game-start');
-    // startGameButton.classList.remove('start-game');
-    // startGameButton.classList.add('game-start');
-    // startGameButton.textContent = 'Let\'s do this';
 }
 
+//prevent enter key and check hidden
 function inputManagement(inputKey) {
     if (inputKey.key === 'Enter') {
         inputKey.preventDefault();
@@ -223,15 +221,7 @@ function inputManagement(inputKey) {
     }
 }
 
-// function onLoad() {
-//     startGameButtonContainer.style.height = `${gameContainerHeight}px`;
-//     startGameButtonContainer.style.width = `${gameContainerWidth}px`;
-//     const startGameButtonContainerWidth = startGameButtonContainer.getBoundingClientRect().width;
-//     const startGameButtonContainerHeight = startGameButtonContainer.getBoundingClientRect().height;
-//     startGameButton.style.width = `${0.5 * startGameButtonContainerWidth}px`;
-//     startGameButton.style.height = `${0.5 * startGameButtonContainerHeight}px`;
-//     startGameButton.style.transform = `translate(${(startGameButtonContainerWidth - (0.5 * startGameButtonContainerWidth)) / 2}px, ${(startGameButtonContainerHeight - (0.5 * startGameButtonContainerHeight)) / 2}px)`;
-// }
+//MANAGE HIDDEN MESSAGES
 function checkHiddenMessage(checkIt) {
     if (document.querySelector('p.first.message-four.message') && checkIt === 'button-message') {
         document.querySelector('p.first.message-four.message').classList.remove('message');
@@ -242,4 +232,35 @@ function checkHiddenMessage(checkIt) {
         document.querySelector('.first.message-two.message').classList.remove('message');
         document.querySelector('.first.message-two').classList.add('no-opacity');
     }
+}
+
+//CREATE PLAYER OBJECTS
+function Player(playerName, playerSymbol) {
+    const name = playerName;
+    const symbol = playerSymbol;
+    return {name, symbol};
+}
+
+function getMoves(player) {
+    const playerMoves = gameboardArray.filter(playedBlock => playedBlock.symbol === player.symbol);
+    let probableWin = [];
+
+    for (let i = 0; i < playerMoves.length; i++) {
+        for (let combination of globalCheck) { //cycle through all possible combinations
+            for (let index of combination) { //cycle through every number every combination
+                if (playerMoves[i].index === index) { //if the played index matchs a number
+                    //console.log(combination) //return the combinations with a matching number (ie played block)
+                    probableWin.push({combination, combinationIndex : globalCheck.indexOf(combination)});
+                    //compare the indexes of all combinations, keep the ones that have the same index?
+                }
+            }
+        }
+    } 
+
+    for (let i = 0; i < probableWin.length; i++) {
+        if (probableWin.filter(element => element.combinationIndex === probableWin[i].combinationIndex).length === 3) {
+            return player;
+        }
+    }
+
 }
