@@ -125,7 +125,7 @@ input:focus {
 
 .hide {
     z-index: -1;
-    animation: fade-out 2000ms forwards;
+    animation: fade-out 1000ms forwards;
 }
 
 .hidden {
@@ -149,7 +149,7 @@ input:focus {
 
 .message {
     opacity: 0;
-    animation: message-transition 3000ms forwards;
+    animation: message-transition 1500ms forwards;
 }
 
 @keyframes message-transition {
@@ -168,7 +168,7 @@ div p {
 .screen {
     position: absolute;
     opacity: 1;
-    transition: opacity 1500ms;
+    transition: opacity 1200ms;
     top: 0;
     background-color: black;
     color: white;

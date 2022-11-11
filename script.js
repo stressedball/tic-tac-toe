@@ -9,7 +9,9 @@ let playerOne = {};
 let playerTwo = {};
 let playerOneName = '', playerTwoName = '', playerOneSymbol = '', playerTwoSymbol = '';
 let globalCheck = [[0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 4, 8], [6, 4, 2]];
+let isHuman = false;
 
+//GENERATE GAMEBOARD AND STORE INDEX IN AN ARRAY
 function Gameboard() {
     for (let i = 0; i < 9; i++) {
         gameboardArray.push({index : i})
@@ -20,34 +22,53 @@ function Gameboard() {
     }
 }
 
-function Gameflow () {
-
+//VS HUMAN PLAYERS, EVENT LISTENERS NEEDED
+function Game () {
     for (let block of gameboardArray) {
         block = document.querySelector(`.block[data-index = "${block.index}"]`);
         block.addEventListener('click', listener);
         block.addEventListener('click', checkMoves);
     }
 
-    function checkMoves() {
-        if (getMoves(playerOne) !== undefined) {
-            document.querySelector('.fourth .winner').classList.remove('no-opacity');
-            document.querySelector('.fourth .winner').textContent += ` ${playerOneName}`;
-            for (let block of gameboardArray) {
-                block = document.querySelector(`.block[data-index = "${block.index}"]`);
-                block.removeEventListener('click', listener);
-                block.removeEventListener('click', checkMoves);
-            }
-        } else if (getMoves(playerTwo) !== undefined) {
-            document.querySelector('.fourth .winner').classList.remove('no-opacity');
-            document.querySelector('.fourth .winner').textContent += ` ${playerTwoName}`;
-            for (let block of gameboardArray) {
-                block = document.querySelector(`.block[data-index = "${block.index}"]`);
-                block.removeEventListener('click', listener);
-            }
-        }
+}
+
+
+function checkMoves() {
+    if (getMoves(playerOne) !== undefined) {
+        displayWinner(playerOneName);
+        removeListeners();
+    } else if (getMoves(playerTwo) !== undefined) {
+        displayWinner(playerTwoName);
+        removeListeners();
     }
 }
 
+//DETECT COMBINATIONS AND RETURN PLAYER NAME IF WINNING COMBINATION
+function getMoves(player) {
+    const playerMoves = gameboardArray.filter(playedBlock => playedBlock.symbol === player.symbol);
+    let probableWin = [];
+
+    for (let i = 0; i < playerMoves.length; i++) {
+        for (let combination of globalCheck) { //cycle through all possible combinations
+            for (let index of combination) { //cycle through every number every combination
+                if (playerMoves[i].index === index) { //if the played index matchs a number
+                    probableWin.push({combinationIndex : globalCheck.indexOf(combination)});
+                }
+            }
+        }
+    } 
+
+    for (let i = 0; i < probableWin.length; i++) {
+        if (probableWin.filter(element => element.combinationIndex === probableWin[i].combinationIndex).length === 3) {
+            return player;
+        }
+    }
+
+}
+
+//CPU LISTENS TO CLICKS MADE BY USER TO ACT
+
+//MAKE TURNS ON CLICKS, ADD X OR O, ADD SYMBOL TO GAMEBOARDARRAY
 function listener(event) {
     let block = document.querySelector(`.block[data-index = "${event.target.dataset.index}"]`);
     if (block.classList.contains('tagged')) {
@@ -67,16 +88,30 @@ function listener(event) {
     }
 }
 
+function removeListeners() {
+    for (let block of gameboardArray) {
+        block = document.querySelector(`.block[data-index = "${block.index}"]`);
+        block.removeEventListener('click', listener);
+        block.removeEventListener('click', checkMoves);
+    }
+}
+
+function displayWinner(name) {
+    document.querySelector('.fourth .winner').classList.remove('no-opacity');
+    document.querySelector('.fourth .winner').classList.add('message');
+    document.querySelector('.fourth .winner').textContent += ` ${name}`;
+}
+
+//THE WHOLE SCREENS LOGIC, TAKES PLAYERS NAME, CHOICE BETWEEN HUMAN VS CPU/HUMAN
 function clickManagement(event) {
 
-    //SECOND PLAYER THIRD AND LAST SCREEN
-    if (event.target === document.querySelector('.player-two-register')) {
+    //SECOND PLAYER SCREEN
+    if (event.target === document.querySelector('.player-two-register')) {  
         let goBack = false;
 
         if (document.querySelector('input.player-name.two').value === '') {
             if (document.querySelector('.third.message-two.no-opacity')) {
-                document.querySelector('.third.message-two.no-opacity').classList.remove('no-opacity');
-                document.querySelector('.third.message-two').classList.add('message');
+                toggleOpacity('.third.message-two');
                 goBack = true;
             } else {
                 goBack = false;
@@ -90,18 +125,16 @@ function clickManagement(event) {
 
         playerTwoName = (document.querySelector('input.player-name.two').value);
         playerTwo = Player(playerTwoName, playerTwoSymbol);
-        document.querySelector('div.third').classList.add('hide');
-        document.querySelector('div.fourth').classList.remove('hidden');
-        document.querySelector('div.fourth').classList.add('screen');
-        Gameflow();
+        toggleScreens('.third', '.fourth');
+        Game();
+        isHuman = true;
     }
 
     //HUMAN CPU CHOICE MANAGEMENT
     if (event.target === document.querySelector('button.human-cpu-choice')) {
         let goBack = false;
         if (document.querySelector('button.cpu.focus') === null && document.querySelector('button.human.focus') === null) {
-            document.querySelector('.second.message-two.no-opacity').classList.remove('no-opacity');
-            document.querySelector('.second.message-two').classList.add('message');
+            toggleOpacity('.second.message-two');
             goBack = true;
         } else {
             goBack = false;
@@ -112,16 +145,16 @@ function clickManagement(event) {
         }
 
         if (document.querySelector('button.cpu.focus')) {
-
+            playerTwo = Player('CPU', playerTwoSymbol);
+            toggleScreens('.second', '.fourth')
+            Game();
         } else if (document.querySelector('button.human.focus')) {
-            document.querySelector('.second').classList.add('hide');
-            document.querySelector('.third').classList.remove('hidden');
-            document.querySelector('.third').classList.add('screen');
+            toggleScreens('.second', '.third')
             document.querySelector('.show-symbol').textContent += ` ${playerTwoSymbol}`;
         }
     }
 
-    //SECOND SCREEN HUMAN CPU CHOICE FOCUS
+    ///////////////////SYLE ONLY -> SECOND SCREEN HUMAN CPU CHOICE FOCUS
     if (event.target === document.querySelector('.human')) {
         event.target.classList.add('focus');
         if (document.querySelector('.cpu').classList.contains('focus')) {
@@ -140,8 +173,7 @@ function clickManagement(event) {
 
         if (document.querySelector('button.focus') === null) {
             if (document.querySelector('p.first.message-four.no-opacity')) {
-                document.querySelector('p.first.message-four.no-opacity').classList.remove('no-opacity');
-                document.querySelector('p.first.message-four').classList.add('message');
+                toggleOpacity('.first.message-four');
                 goBack = true;
             } else {
                 goBack = false;
@@ -151,8 +183,7 @@ function clickManagement(event) {
 
         if (document.querySelector('input.player-name').value === '') {
             if (document.querySelector('.first.message-two.no-opacity')) {
-                document.querySelector('.first.message-two.no-opacity').classList.remove('no-opacity');
-                document.querySelector('.first.message-two').classList.add('message');
+                toggleOpacity('.first.message-two');
                 goBack = true;
             } else {
                 goBack = false;
@@ -168,9 +199,7 @@ function clickManagement(event) {
         playerOneSymbol = document.querySelector('button.focus').textContent;
         playerOne = Player(playerOneName, playerOneSymbol);
         playerTwoSymbol = document.querySelector('.symbol-choice div button:not(.focus)').textContent;
-        document.querySelector('.first').classList.add('hide')
-        document.querySelector('.second').classList.remove('hidden');
-        document.querySelector('.second').classList.add('screen');
+        toggleScreens('.first', '.second')
     }
 
     //FIRST SCREEN PLAYER ONE SYMBOL FOCUS
@@ -191,22 +220,12 @@ function clickManagement(event) {
     //event prevent default player 1 input name
     if (event.target.classList.contains('player-name')) {
         event.preventDefault();
-        // let playerName = document.getElementById('player-name one').value;
     }
 
     //START GAME
     if (event.target.classList.contains('start-game')) {
         newGame();
     }
-}
-
-//TOGGLE START BUTTON
-function newGame() {
-    document.querySelector('button.start-game').classList.add('hide');
-    document.querySelector('.button-start-container').classList.add('hide');
-    document.querySelector('.game .button-start-container').classList.remove('button-start-container');
-    document.querySelector('.first').classList.add('screen');
-    document.querySelector('.first').classList.remove('hidden');
 }
 
 //prevent enter key and check hidden
@@ -221,7 +240,27 @@ function inputManagement(inputKey) {
     }
 }
 
-//MANAGE HIDDEN MESSAGES
+//CREATE PLAYER OBJECTS
+function Player(playerName, playerSymbol) {
+    const name = playerName;
+    const symbol = playerSymbol;
+    return {name, symbol};
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//////////////////////////STYLES/////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+//STYLE -> TOGGLE SCREENS
+function toggleScreens(screenOne, screenTwo) {
+    document.querySelector(`${screenOne}`).classList.add('hide');
+    document.querySelector(`${screenTwo}`).classList.remove('hidden');
+    document.querySelector(`${screenTwo}`).classList.add('screen');
+}
+
+//STYLE -> MANAGE HIDDEN MESSAGES
 function checkHiddenMessage(checkIt) {
     if (document.querySelector('p.first.message-four.message') && checkIt === 'button-message') {
         document.querySelector('p.first.message-four.message').classList.remove('message');
@@ -234,33 +273,17 @@ function checkHiddenMessage(checkIt) {
     }
 }
 
-//CREATE PLAYER OBJECTS
-function Player(playerName, playerSymbol) {
-    const name = playerName;
-    const symbol = playerSymbol;
-    return {name, symbol};
+//STYLE -> TOGGLE START BUTTON
+function newGame() {
+    document.querySelector('button.start-game').classList.add('hide');
+    document.querySelector('.button-start-container').classList.add('hide');
+    document.querySelector('.game .button-start-container').classList.remove('button-start-container');
+    document.querySelector('.first').classList.add('screen');
+    document.querySelector('.first').classList.remove('hidden');
 }
 
-function getMoves(player) {
-    const playerMoves = gameboardArray.filter(playedBlock => playedBlock.symbol === player.symbol);
-    let probableWin = [];
-
-    for (let i = 0; i < playerMoves.length; i++) {
-        for (let combination of globalCheck) { //cycle through all possible combinations
-            for (let index of combination) { //cycle through every number every combination
-                if (playerMoves[i].index === index) { //if the played index matchs a number
-                    //console.log(combination) //return the combinations with a matching number (ie played block)
-                    probableWin.push({combination, combinationIndex : globalCheck.indexOf(combination)});
-                    //compare the indexes of all combinations, keep the ones that have the same index?
-                }
-            }
-        }
-    } 
-
-    for (let i = 0; i < probableWin.length; i++) {
-        if (probableWin.filter(element => element.combinationIndex === probableWin[i].combinationIndex).length === 3) {
-            return player;
-        }
-    }
-
+//STYLE -> OPACITY 
+function toggleOpacity(selector) {
+    document.querySelector(`${selector}`).classList.remove('no-opacity');
+    document.querySelector(`${selector}`).classList.add('message');
 }
