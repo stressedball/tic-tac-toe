@@ -9,7 +9,7 @@ let playerOne = {};
 let playerTwo = {};
 let playerOneName = '', playerTwoName = '', playerOneSymbol = '', playerTwoSymbol = '';
 let globalCheck = [[0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 4, 8], [6, 4, 2]];
-let isHuman = false;
+let isCPU = false;
 
 //GENERATE GAMEBOARD AND STORE INDEX IN AN ARRAY
 function Gameboard() {
@@ -27,20 +27,64 @@ function Game () {
     for (let block of gameboardArray) {
         block = document.querySelector(`.block[data-index = "${block.index}"]`);
         block.addEventListener('click', listener);
-        block.addEventListener('click', checkMoves);
     }
+}
+
+//CPU CHOICES
+function againstCPU() {
+
+    let weightMoves = [];
+    let weightCombination = [];
+    
+    if (getTurn().name === 'CPU') {
+        // let clickThisIndex = 0;
+        // let block = document.querySelector(`.block[data-index = "${clickThisIndex}"]`);
+        // const playerMoves = gameboardArray.filter(playedBlock => playedBlock.symbol === player.symbol);
+
+        // for (let block of gameboardArray) {
+        //     let totalWeight = 0;
+        //     if (!block.classList.contains('.tagged')) {
+        //         if (block.index === 4) {
+        //             totalWeight += Infinity;
+        //         } else if (block.index === 0 || block.index === 2 || block.index === 6 || block.index === 8) {
+        //             totalWeight += 1;
+        //         } 
+        //     }
+        // }
+        
+        let recurrenceCount = [];
+        
+        for (let i = 0; i < 9; i++) {
+            let localCount = 0;
+            for (let combination of globalCheck) {
+                for (let index of combination) {
+                    if (index === i) {
+                        localCount++;
+                    }
+                }
+            }
+            recurrenceCount.push({index : i, count : localCount});
+        }
+        console.log(recurrenceCount)
+        
+        //get max from the recurrenceCount then get index
+        //check if index is not tagged and click it
+        let toBeClicked = Math.max(...recurrenceCount);
+        console.log(toBeClicked)
+        document.querySelector(`.block[data-index = ${toBeClicked}]`);
+
+    }
+
+    setTimeout(() => {
+        againstCPU();
+    }, 2000);
 
 }
 
-
-function checkMoves() {
-    if (getMoves(playerOne) !== undefined) {
-        displayWinner(playerOneName);
-        removeListeners();
-    } else if (getMoves(playerTwo) !== undefined) {
-        displayWinner(playerTwoName);
-        removeListeners();
-    }
+function displayWinner(name) {
+    document.querySelector('.fourth .winner').classList.remove('no-opacity');
+    document.querySelector('.fourth .winner').classList.add('message');
+    document.querySelector('.fourth .winner').textContent += ` ${name}`;
 }
 
 //DETECT COMBINATIONS AND RETURN PLAYER NAME IF WINNING COMBINATION
@@ -60,46 +104,55 @@ function getMoves(player) {
 
     for (let i = 0; i < probableWin.length; i++) {
         if (probableWin.filter(element => element.combinationIndex === probableWin[i].combinationIndex).length === 3) {
-            return player;
+            displayWinner(player.name);
+            removeListeners();
+            isCPU = false;
+            break;
         }
     }
 
 }
 
-//CPU LISTENS TO CLICKS MADE BY USER TO ACT
-
 //MAKE TURNS ON CLICKS, ADD X OR O, ADD SYMBOL TO GAMEBOARDARRAY
 function listener(event) {
+
     let block = document.querySelector(`.block[data-index = "${event.target.dataset.index}"]`);
     if (block.classList.contains('tagged')) {
         return;
     } else {
         const boardIndex = block.getAttribute('data-index');
-        let symbol;
-        if (count % 2 === 0) {
-            symbol = playerOne.symbol;
-        } else if (count % 2 !== 0) {
-            symbol = playerTwo.symbol;
-        }
         block.classList.add('tagged');
-        block.textContent = symbol;
-        gameboardArray[boardIndex].symbol = symbol;
+        let foo = getTurn();
+        block.textContent = foo.symbol;
+        gameboardArray[boardIndex].symbol = block.textContent;
+        getMoves(foo);
         count++;
     }
+}
+
+function getTurn() {
+    let thisTurn;
+    if (count % 2 === 0) {
+        if (playerOne.turn === 1) {
+            thisTurn = playerOne;
+        } else {
+            thisTurn = playerTwo;
+        }
+    } else if (count % 2 !== 0) {
+        if (playerOne.turn === 1) {
+            thisTurn = playerTwo;
+        } else {
+            thisTurn = playerOne;
+        }
+    }
+    return thisTurn;
 }
 
 function removeListeners() {
     for (let block of gameboardArray) {
         block = document.querySelector(`.block[data-index = "${block.index}"]`);
         block.removeEventListener('click', listener);
-        block.removeEventListener('click', checkMoves);
     }
-}
-
-function displayWinner(name) {
-    document.querySelector('.fourth .winner').classList.remove('no-opacity');
-    document.querySelector('.fourth .winner').classList.add('message');
-    document.querySelector('.fourth .winner').textContent += ` ${name}`;
 }
 
 //THE WHOLE SCREENS LOGIC, TAKES PLAYERS NAME, CHOICE BETWEEN HUMAN VS CPU/HUMAN
@@ -127,7 +180,6 @@ function clickManagement(event) {
         playerTwo = Player(playerTwoName, playerTwoSymbol);
         toggleScreens('.third', '.fourth');
         Game();
-        isHuman = true;
     }
 
     //HUMAN CPU CHOICE MANAGEMENT
@@ -146,7 +198,9 @@ function clickManagement(event) {
 
         if (document.querySelector('button.cpu.focus')) {
             playerTwo = Player('CPU', playerTwoSymbol);
-            toggleScreens('.second', '.fourth')
+            toggleScreens('.second', '.fourth');
+            isCPU = true;
+            againstCPU();
             Game();
         } else if (document.querySelector('button.human.focus')) {
             toggleScreens('.second', '.third')
@@ -228,6 +282,19 @@ function clickManagement(event) {
     }
 }
 
+//CREATE PLAYER OBJECTS
+function Player(playerName, playerSymbol) {
+    const name = playerName;
+    const symbol = playerSymbol;
+    let turn = 0;
+    if (playerSymbol === 'X') {
+        turn = 1;
+    } else {
+        turn = 2;
+    }
+    return {name, symbol, turn};
+}
+
 //prevent enter key and check hidden
 function inputManagement(inputKey) {
     if (inputKey.key === 'Enter') {
@@ -239,15 +306,6 @@ function inputManagement(inputKey) {
         checkHiddenMessage('player-one-name');
     }
 }
-
-//CREATE PLAYER OBJECTS
-function Player(playerName, playerSymbol) {
-    const name = playerName;
-    const symbol = playerSymbol;
-    return {name, symbol};
-}
-
-
 
 /////////////////////////////////////////////////////////////////////////////
 //////////////////////////STYLES/////////////////////////////////////////////
