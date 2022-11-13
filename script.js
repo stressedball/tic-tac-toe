@@ -3,12 +3,12 @@
 window.addEventListener('keypress', inputManagement);
 window.addEventListener('click', clickManagement);
 let gameboardArray = [];
+let globalCheck = [[0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 4, 8], [6, 4, 2]];
 const newGameboard = new Gameboard();
 let count = 0;
 let playerOne = {};
 let playerTwo = {};
 let playerOneName = '', playerTwoName = '', playerOneSymbol = '', playerTwoSymbol = '';
-let globalCheck = [[0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 4, 8], [6, 4, 2]];
 let isCPU = false;
 
 //GENERATE GAMEBOARD AND STORE INDEX IN AN ARRAY
@@ -19,6 +19,23 @@ function Gameboard() {
         block.classList.add('block');
         block.setAttribute('data-index', `${i}`);
         document.querySelector('.gameboard').appendChild(block);
+    }
+
+    let recurrenceCount = [];
+    for (let i = 0; i < 9; i++) {
+        let localCount = 0;
+        for (let combination of globalCheck) {
+            for (let index of combination) {
+                if (index === i) {
+                    localCount++;
+                }
+            }
+        }
+        recurrenceCount.push({index : i, count : localCount});
+    }
+
+    for (let element of gameboardArray) {
+        element.count = recurrenceCount[element.index].count;
     }
 }
 
@@ -33,51 +50,22 @@ function Game () {
 //CPU CHOICES
 function againstCPU() {
 
-    let weightMoves = [];
-    let weightCombination = [];
-    
     if (getTurn().name === 'CPU') {
-        // let clickThisIndex = 0;
-        // let block = document.querySelector(`.block[data-index = "${clickThisIndex}"]`);
-        // const playerMoves = gameboardArray.filter(playedBlock => playedBlock.symbol === player.symbol);
-
-        // for (let block of gameboardArray) {
-        //     let totalWeight = 0;
-        //     if (!block.classList.contains('.tagged')) {
-        //         if (block.index === 4) {
-        //             totalWeight += Infinity;
-        //         } else if (block.index === 0 || block.index === 2 || block.index === 6 || block.index === 8) {
-        //             totalWeight += 1;
-        //         } 
-        //     }
-        // }
+        const strategy = gameboardArray.filter(block => !block.status);
         
-        let recurrenceCount = [];
-        
-        for (let i = 0; i < 9; i++) {
-            let localCount = 0;
-            for (let combination of globalCheck) {
-                for (let index of combination) {
-                    if (index === i) {
-                        localCount++;
-                    }
-                }
+        let localMax = {index : 0, count : 0};
+        for (let el of strategy) {
+            if (el.count > localMax.count) {
+                localMax = el;
             }
-            recurrenceCount.push({index : i, count : localCount});
         }
-        console.log(recurrenceCount)
         
-        //get max from the recurrenceCount then get index
-        //check if index is not tagged and click it
-        let toBeClicked = Math.max(...recurrenceCount);
-        console.log(toBeClicked)
-        document.querySelector(`.block[data-index = ${toBeClicked}]`);
-
+        document.querySelector(`.block[data-index = "${localMax.index}"]`).click();
     }
 
     setTimeout(() => {
         againstCPU();
-    }, 2000);
+    }, 200);
 
 }
 
@@ -111,6 +99,10 @@ function getMoves(player) {
         }
     }
 
+    if (gameboardArray.filter(el => el.status).length === 9) {
+        document.querySelector('.fourth .tie-game').classList.remove('no-opacity');
+        document.querySelector('.fourth .tie-game').classList.add('message');
+    }
 }
 
 //MAKE TURNS ON CLICKS, ADD X OR O, ADD SYMBOL TO GAMEBOARDARRAY
@@ -125,6 +117,7 @@ function listener(event) {
         let foo = getTurn();
         block.textContent = foo.symbol;
         gameboardArray[boardIndex].symbol = block.textContent;
+        gameboardArray[boardIndex].status = 'tagged';
         getMoves(foo);
         count++;
     }

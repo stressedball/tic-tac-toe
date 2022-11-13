@@ -54,20 +54,8 @@ button {
     background-color: gray;
 }
 
-.button-start-container::before {
-    /* content: '';
+.fourth p {
     position: absolute;
-    background-color: black; */
-    /* min-width: clamp(100px, 120px, 200px);
-    min-height: clamp(100px, 120px, 200px);
-    background-color: aliceblue; */
-    /* min-height: 100%;
-    min-width: 100%;
-    transition: min-height 2000ms; */
-}
-
-.button-start-container:hover::before {
-    /* background-color: gray; */
 }
 
 .hide-container {
