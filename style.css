@@ -1,0 +1,156 @@
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+
+body {
+    background-color: white;
+    height: 100vh;
+    width: 100vw;
+    color:  black;
+    overflow: hidden;
+    margin: 0;
+    font-family: 'Righteous', cursive;
+}
+
+#content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.hero {
+    display: flex;
+    gap: 3rem;
+}
+
+.hero h1 {
+    font-size: 5rem;
+}
+
+img[alt="logo"] {
+    max-width: 10vh;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1 0 auto;
+    justify-content: center;
+    gap: 1rem;
+    position: relative;
+}
+
+.choice-buttons {
+    height: 12vh;
+    width: 25vw;
+    font-family: 'Righteous', cursive;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    position: relative;
+    z-index: 1;
+    border: 3px solid;
+    transition: box-shadow 250ms linear;
+    color: black;
+}
+
+.choice-buttons:hover {
+    color: white;
+    box-shadow: inset 25vw 0 0 0 rgba(0, 0, 0, 0.3);
+    transition: color box-shadow 250ms linear;
+    cursor:pointer; 
+    border-color: black;
+}
+
+p.instruction {
+    font-size: 24px;
+}
+
+.symbol-container {
+    border: 1px solid black;
+    padding: 1rem;
+}
+
+.symbol-container:hover {
+    cursor:pointer;
+    box-shadow: inset calc(50px + 2rem) 0 0 0 grey;
+    transition:  box-shadow 250ms linear;
+}
+
+.symbol-container:hover .symbols {
+    filter: invert(100%) sepia(100%) saturate(38%) hue-rotate(254deg) brightness(110%) contrast(110%);
+}
+
+.symbols {
+    width: 50px;
+    height: 50px;
+}
+
+.board {
+    min-width: 50vh;
+    min-height: 50vh;
+    content: '';
+    border: 1px solid;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 1px;
+}
+
+.tile {
+    background-color: grey;
+}
+
+.tile:hover {
+    cursor: pointer;
+    background-color: rgb(175, 175, 175);
+}
+
+.tile.played.cross,
+.tile.played.circle {
+    background-color: grey;
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.tile.played.cross {
+    background: url('./assets/cross-sign-svgrepo-com.svg');
+    background-color: grey;
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.tile.played.circle {
+    background: url('./assets/circle-stroked-svgrepo-com.svg');
+    background-color: grey;
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.winner-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    background-color: grey;
+    border-radius: 12px;
+    box-shadow: 0 0 12px 0 black;
+    min-width: 50%;
+    padding: 3rem;
+}
+
+.winner-container > p {
+    font-size: 24px;
+    margin-bottom: 3rem;
+}

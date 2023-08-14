@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+
+*{
+    max-width: 100vw;
+}
+body{
+    font-family: 'Righteous', cursive;
+    background-color: white;
+    margin: 0;
+    overflow: hidden;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    /* padding: 1rem; */
+}
+img[alt = "logo"] {
+    max-width: 8vh;
+}
+.hero{
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 1rem;
+    min-width: 100vw;
+    justify-content: center;
+}
+
+.credit{
+    font-weight: bold;
+}
+#content{
+    /* display: grid; */
+    grid-template-rows: 30vh 70vh;
+    /* align-items: center; */
+    max-width: 100vw;
+}
+.container{
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    justify-self: center;
+}
+
+.choice-buttons{
+    width: 60vw;
+    height: 10vh;
+    font-size: 1.2rem;
+    background: aliceblue;
+    border: 3px solid black;
+    border-radius: 5px;
+    font-family: 'Righteous', cursive;
+}
+
+.symbols{
+    background-color: aliceblue;
+    width: 45px;
+    border: 1px solid;
+    padding: 1.5rem;
+    border-radius: 5px;
+}
+.instruction{
+    max-width: 70vw;
+}
+.board{
+    margin: auto;
+    margin-top: 5vh;
+    border: 1px solid;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 1px;
+    width: 65vw;
+    height: 65vw;
+}
+
+.tile{
+    background-color: paleturquoise;
+}
+
+.tile.played.cross, .tile.played.circle{
+    background-color: aliceblue;
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.tile.played.cross{
+    background: url('./assets/cross-sign-svgrepo-com.svg');
+    background-color: aliceblue;
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.tile.played.circle{
+    background: url('./assets/circle-stroked-svgrepo-com.svg');
+    background-color: aliceblue;
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.winner-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
